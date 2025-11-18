@@ -7,37 +7,4 @@ LICENSE: CC0, but only for the changes from the original data, not for the full 
 
 `crescent_crash_workaround` - At some point in the game you gain access to an item with "Crescent" in its name that causes you to teleport to another scene. For some reason, when doing this content, at some point during it, I crashed. I debugged the issue and made this addon for myself so that I could finish that content. I *do not* remember the details, or even what point in the content the crash happened. I do not know whether this addon is still needed.
 
-`Late DB Attack` - Delay Dark Brotherhood attacks in a relatively simple way:
-
-```
-; Index 5 of this quest is the earliest point in the main
-; quest that the protagonist is expected to talk to anyone
-; about the Nerevarine prophecies.
-; However, if a newbie gets assaulted by assassins on the
-; way to the dungeon, and they never got assaulted by
-; assassins before, it'd be SUPER janky, so I'll use the
-; "gave the puzzle box to Antabolis" index instead.
-if ( GetJournalIndex A1_2_AntabolisInformant >= 10 )
-	set goodtogo to 1
-endif
-; We can also do it if they're doing the backdoor.
-if ( GetJournalIndex CX_BackPath > 0 )
-	set goodtogo to 1
-endif
-; If they somehow completed the main quest without
-; doing any of the above (which is entirely possible)
-; we should account for that, too.
-if ( GetJournalIndex C3_DestroyDagoth == 50 )
-	set goodtogo to 1
-endif
-; Alternatively, we can assume the protagonist is "good to go"
-; if they're high enough level.
-if ( player->GetLevel >= 5 )
-	set goodtogo to 1
-endif
-
-if ( goodtogo == 0 )
-	return
-endif
-```
-
+`Late DB Attack` - Delay Dark Brotherhood attacks: if you reach level 5, or start the main quest (specifically doing the puzzle cube quest), or do the back door quest, or finish the main quest, then DB attacks are enabled. Otherwise they're disabled. This delays the attacks long enough to not confuse new players without making it hard to access the content that's locked behind them.
